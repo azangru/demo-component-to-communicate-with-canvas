@@ -1,0 +1,16 @@
+{
+  "include": ["src"],
+  "exclude": ["node_modules/*"],
+  "compilerOptions": {
+    "strict": true,
+    "target": "es2019",
+    "jsx": "react",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "plugins": [
+      { "name": "typescript-plugin-css-modules" }
+    ]
+  }
+}
