@@ -1,0 +1,36 @@
+.wrapper {
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+              'header header'
+              'main   aside';
+  grid-template-columns: 1fr 10vw;
+  grid-template-rows: 20vh 1fr; 
+}
+
+my-canvas-element {
+  box-sizing: border-box;
+  grid-area: main;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.controls {
+  grid-area: aside;
+  padding: 0.6rem;
+}
+
+.text-control input {
+  margin-bottom: 1rem;
+}
+
+.text-control input {
+  max-width: 100%;
+}
+
+.textPositionInfo {
+  grid-area: header;
+  align-self: center;
+  justify-self: center;
+}
