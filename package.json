@@ -16,7 +16,7 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
-    "deploy": "gh-pages -d build"
+    "deploy": "touch build/.nojekyll && gh-pages -d build"
   },
   "author": "",
   "license": "ISC"
