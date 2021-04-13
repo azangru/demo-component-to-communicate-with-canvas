@@ -1,19 +1,9 @@
-type Message = {
-  action: 'move-left'
-} | {
-  action: 'move-right'
-} | {
-  action: 'reset'
-} | {
-  action: 'change-text',
-  payload: {
-    text: string
-  }
-};
+import { Message, MessagingAction } from "../actions";
 
 export class Canvas {
 
   rootElement: HTMLElement;
+  callback: (message: Message) => void;
   canvas: HTMLCanvasElement;
 
   get initialTextX() {
@@ -32,10 +22,11 @@ export class Canvas {
     y: 0
   }
 
-  constructor(rootElement: HTMLElement) {
+  constructor(rootElement: HTMLElement, callback: (message: Message) => void) {
     this.rootElement = rootElement;
     this.canvas = document.createElement('canvas');
-    
+    this.callback = callback;
+
     this.initializeCanvas(rootElement);
     this.resetCanvas();
   }
@@ -139,31 +130,45 @@ export class Canvas {
   }
 
   reportTextMove() {
-    const event = new CustomEvent('outgoing-message', {
-      bubbles: false,
-      detail: {
-        action: 'text-moved',
+    const message = {
+        action: MessagingAction.TEXT_MOVED,
         payload: {
           x: this.textState.x
         }
-      }
-    });
-    this.rootElement.dispatchEvent(event);
+      };
+
+    this.callback(message);
   }
 
   receiveMessage(message: Message) {
-    const step = Math.floor(this.canvas.width / 20);
-    if (message.action === 'move-left') {
-      this.textState.x -= step;
-      this.drawText();
-    } else if (message.action === 'move-right') {
-      this.textState.x += step;
-      this.drawText();
-    } else if (message.action === 'reset') {
+
+    if (message.action === MessagingAction.MOVE_LEFT) {
+      this.moveLeft();
+    } else if (message.action === MessagingAction.MOVE_RIGHT) {
+      this.moveRight();
+    } else if (message.action === MessagingAction.RESET) {
       this.resetCanvas();
-    } else if (message.action === 'change-text') {
-      this.textState.value = message.payload.text;
-      this.drawText();
+    } else if (message.action === MessagingAction.CHANGE_TEXT) {
+      this.changeText(message.payload.text);
     }
   }
+
+  changeText (text: string) {
+      this.textState.value = text;
+      this.drawText();
+  }
+  
+  moveRight() {
+    const step = Math.floor(this.canvas.width / 20);
+    this.textState.x += step;
+      this.drawText();
+  }
+
+  moveLeft() {
+    const step = Math.floor(this.canvas.width / 20);
+    this.textState.x -= step;
+    this.drawText();
+  }
+
+
 }

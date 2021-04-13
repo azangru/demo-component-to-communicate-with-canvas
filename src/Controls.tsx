@@ -1,28 +1,33 @@
 import React from 'react';
 
-import messagingService from './messagingService';
+import MessagingService from './messagingService';
+import {createMessagingAction, MessagingAction} from  './actions';
 
-const moveLeftMessage = {
-  action: 'move-left'
-};
 
-const moveRightMessage = {
-  action: 'move-right'
-};
+const moveLeftMessage = createMessagingAction({
+  action: MessagingAction.MOVE_LEFT
+});
 
-const resetMessage = {
-  action: 'reset'
-};
+const moveRightMessage = createMessagingAction({
+  action: MessagingAction.MOVE_RIGHT
+});
 
-const createChangeTextMessage = (text: string) => ({
-  action: 'change-text',
+const resetMessage = createMessagingAction({
+  action: MessagingAction.MOVE_LEFT
+});
+
+const createChangeTextMessage = (text: string) => createMessagingAction({
+  action: MessagingAction.CHANGE_TEXT,
   payload: {
     text
   }
 });
 
-const Controls = () => {
 
+const Controls = (props: {messagingService: MessagingService}) => {
+
+  const {messagingService} = props;
+  
   const onClickLeft = () => {
     messagingService.send(moveLeftMessage);
   };

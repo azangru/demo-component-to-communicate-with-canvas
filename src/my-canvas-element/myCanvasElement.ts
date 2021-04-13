@@ -40,7 +40,7 @@ export class MyCanvasElement extends HTMLElement {
     if (message.action === 'activate') {
       this.activateCanvas();
     }
-
+    console.log(message)
     this.canvas?.receiveMessage(message);
   }
 
@@ -53,6 +53,7 @@ export class MyCanvasElement extends HTMLElement {
   private addResizeObserver() {
     const resizeObserver = new ResizeObserver(() => {
       this.canvas?.resize();
+
     });
     this.resizeObserver = resizeObserver;
     this.resizeObserver.observe(this);
@@ -64,8 +65,3 @@ export class MyCanvasElement extends HTMLElement {
 
 }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'my-canvas-element': MyCanvasElement
-  }
-}

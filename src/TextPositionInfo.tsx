@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { MessagingAction } from './actions';
 
-import messagingService from './messagingService';
+import MessagingService from './messagingService';
 
-const TextPositionInfo = () => {
+const TextPositionInfo = (props: {messagingService: MessagingService}) => {
+  
+  const {messagingService} = props;
+  const elementId = messagingService.getElementId();
+
   const [x, setX] = useState<number | null>();
 
   const onTextMoved = (payload: { x: number }) => {
@@ -10,8 +15,8 @@ const TextPositionInfo = () => {
   };
 
   useEffect(() => {
-    messagingService.subscribe('text-moved', onTextMoved);
-  });
+    messagingService.subscribe(`${elementId}-${MessagingAction.TEXT_MOVED}`, onTextMoved);
+  }, []);
   
   return (
     <div className="textPositionInfo">
