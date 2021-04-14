@@ -1,10 +1,26 @@
 import { Message, MessagingAction } from "../actions";
 
+export const canvasTemplate = document.createElement('template');
+canvasTemplate.innerHTML = `
+  <style>
+    :host {
+      border: 1px dashed black;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+`;
+
+
 export class Canvas {
 
   rootElement: HTMLElement;
   callback: (message: Message) => void;
   canvas: HTMLCanvasElement;
+  resizeObserver: ResizeObserver | null = null;
 
   get initialTextX() {
     return this.canvas.width / 2;
@@ -21,6 +37,7 @@ export class Canvas {
     x: 0,
     y: 0
   }
+  
 
   constructor(rootElement: HTMLElement, callback: (message: Message) => void) {
     this.rootElement = rootElement;
@@ -29,6 +46,7 @@ export class Canvas {
 
     this.initializeCanvas(rootElement);
     this.resetCanvas();
+    this.addResizeObserver();
   }
 
   initializeCanvas(rootElement: HTMLElement) {
@@ -157,7 +175,7 @@ export class Canvas {
       this.textState.value = text;
       this.drawText();
   }
-  
+
   moveRight() {
     const step = Math.floor(this.canvas.width / 20);
     this.textState.x += step;
@@ -170,5 +188,13 @@ export class Canvas {
     this.drawText();
   }
 
+
+  private addResizeObserver() {
+    const resizeObserver = new ResizeObserver(() => {
+      this.resize();
+    });
+    this.resizeObserver = resizeObserver;
+    this.resizeObserver.observe(this.rootElement?.parentNode as Element);
+  }
 
 }

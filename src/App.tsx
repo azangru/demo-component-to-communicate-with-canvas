@@ -43,18 +43,25 @@ const BrowserControls = (props: {elementId: string}) => {
   )
 }
 
+
+const Browser = () => {
+
+  return <div className="container">
+  <div className="wrapper">
+    <div className={'browser'} id={'browser1'}></div>
+    <BrowserControls elementId={'browser1'} />
+  </div>
+  <div  className="wrapper">
+    <div className={'browser'} id={'browser2'}></div>
+    <BrowserControls elementId={'browser2'} />
+  </div>
+</div>
+}
+
+
 const App = () => {
   
- return  <div className="container">
-    <div className="wrapper">
-      <div className={'browser'} id={'browser1'}></div>
-      <BrowserControls elementId={'browser1'} />
-    </div>
-    <div  className="wrapper">
-      <div className={'browser'} id={'browser2'}></div>
-      <BrowserControls elementId={'browser2'} />
-    </div>
-  </div>
+ return  <Browser/>
 };
 
 export default App;

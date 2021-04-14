@@ -1,59 +1,33 @@
 import { Message } from './actions';
-import { Canvas } from './example-canvas/canvas';
+import { Canvas, canvasTemplate } from './example-canvas/canvas';
 
-const template = document.createElement('template');
-template.innerHTML = `
-  <style>
-    :host {
-      border: 1px dashed black;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-`;
 
 const subscriptions = new Map<string, Set<Function>>();
-
-let element: HTMLElement | null = null;
-type IncomingMessage = {
-  action: string;
-  payload?: Record<string, unknown>
-};
-
-
 class MessagingService {
 
   canvas: Canvas | null = null;
   element: HTMLElement | null= null;
   elementId: string = '';
-  resizeObserver: ResizeObserver | null = null;
 
    constructor (elementId: string) {
     this.elementId = elementId;
-    this.setElement(elementId);
+    this.setCanvasElement(elementId);
 
   };
 
-  public setElement = (elementId: string) => {
+  public setCanvasElement = (elementId: string) => {
 
     const el = document.getElementById(elementId) as HTMLElement;
-    
     if(!el){
       return;
     }
-
     this.element = el;
-  
-    if(!this.element?.innerHTML){
-      this.element?.appendChild(template.content.cloneNode(true));
+    
+    // If the canvas is already present, do not create another one
+    if(!this.element?.getElementsByTagName('canvas')){
+      this.element?.appendChild(canvasTemplate.content.cloneNode(true));
       this.canvas = new Canvas(this.element, this.handleMessage);
       this.element?.appendChild(this.canvas.getCanvasElement());
-
-      // this.element.addEventListener('outgoing-message', this.handleMessage);
-      this.addResizeObserver();
     } else {
       this.canvas = new Canvas(this.element, this.handleMessage);
     }
@@ -96,18 +70,6 @@ class MessagingService {
     }
   };
 
-
-  private addResizeObserver() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.canvas?.resize();
-    });
-    this.resizeObserver = resizeObserver;
-    this.resizeObserver.observe(this.element?.parentNode as Element);
-  }
-
-  // private removeResizeObserver() {
-  //   this.resizeObserver?.unobserve(this.element as Element);
-  // }
 
 }
 

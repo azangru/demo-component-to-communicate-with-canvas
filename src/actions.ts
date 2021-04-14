@@ -11,22 +11,18 @@ export enum MessagingAction {
 
 type ActivateAction = {
     action: MessagingAction.ACTIVATE;
-    payload: undefined
 }
 
 type MoveRightAction = {
     action: MessagingAction.MOVE_RIGHT;
-    payload: undefined
 }
 
 type MoveLeftAction = {
     action: MessagingAction.MOVE_LEFT;
-    payload: undefined
 }
 
 type ResetAction = {
     action: MessagingAction.RESET;
-    payload: undefined
 }
 
 type ChangeTextAction = {
